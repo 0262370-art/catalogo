@@ -1,5 +1,7 @@
-import Navbar from "./components/navBar"
+import Navbar from "./components/navbar"
 import Catalogo from "./components/catalogo"
+import Carrito from "./components/carrito"
+
 
 function App() {
 
@@ -7,6 +9,7 @@ function App() {
     <>
       <Navbar></Navbar>
       <Catalogo></Catalogo>
+      <Carrito></Carrito>
     </>
   )
 }
