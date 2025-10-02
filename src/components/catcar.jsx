@@ -23,20 +23,61 @@ export default function catcar() {
     const [productosCar, setProductosCar] = useState([])
 
     const agregar = (id) => {
+        //encontrar el elemento donde se dio click en agregar
         const productosCopy = [...productos] //tener copia de productos
-        const producto = productosCopy.find((p)=>(p.id==id)) //producto1 es el producto del profe, esto es para encontrar el producto en la copia
-        const productosCarCopy = [...productosCar, producto] //tiene toda la copia + el producto q encontre arriba
-        setProductosCar(productosCarCopy) //actualizamos el estado con la copia nueva
-    }
+        const producto = productosCopy.find((p) => (p.id == id)) //producto1 es el producto del profe, esto es para encontrar el producto en la copia
+        //encontrar el elemento donde se dio click en agregar
 
-    const eliminar = () => {
+        //agrega elemento si el carrito esta vacio
+        if (productosCar.length < 1) {
+            const productosCarCopy = [...productosCar, { ...producto, cantidad: 1 }]
+            setProductosCar(productosCarCopy)
+            // le resta la cantidad del catalogo
+            productosCopy.map((p) => (p.id == id ? p.cantidad = p.cantidad - 1 : p))
+            setProductos(productosCopy)
+            // le resta la cantidad del catalogo
+        }
+        //agrega elemento si el carrito esta vacio
 
+        //agregar eleento cuando el carrito no esta vacio
+        else {
+            const productoCar = productosCar.find((p) => (p.id == id))
+            const productosCarCopy = [...productosCar]
+            //agregar elemento cuando el carrito no esta vacio y ya se tiene un elemento similar (se aumenta cantidad)
+            if (productoCar) {
+
+                //resta la cantidad del catalogo
+                productosCopy.map((p) => (p.id == id ? p.cantidad = p.cantidad - 1 : p))
+                setProductos(productosCopy)
+                //resta la cantidad del catalogo
+
+                //suma la cantidad del carrito
+                productosCarCopy.map((p) => (p.id == id ? p.cantidad = p.cantidad + 1 : p))
+                setProductosCar(productosCarCopy)
+                //suma la cantidad del carrito
+            }
+            else {
+                productosCopy.map((p) => (p.id == id ? p.cantidad = p.cantidad - 1 : p))
+                setProductos(productosCopy)
+
+                const productosCarCopy = [...productosCar, { ...producto, cantidad: 1 }]
+                setProductosCar(productosCarCopy)
+            }
+            //agregar elemento cuando el carrito no esta vacio y ya se tiene un elemento similar (se aumenta cantidad)
+
+        }//agregar eleento cuando el carrito no esta vacio
+    } //HACER QUE LA CANTIDAD NO BAJE DE CERO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+    const eliminar = (id) => {
+        const productosCarCopy = [...productosCar]
+        setProductosCar(productosCarCopy.filter((p) => (p.id != id)))
+        //REGRESARLE LA CANTIDAD AL CATALOGO EN ESA FUNCION ELIMINAR
     }
 
     return (
         <div>
             <Catalogo productos={productos} onClick={agregar}></Catalogo>
-            <Carrito productos={productosCar}></Carrito>
+            <Carrito productos={productosCar}onClick={eliminar}></Carrito>
         </div>
     )
 }
